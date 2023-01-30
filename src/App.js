@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { Link, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Account from "./components/Account";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
+import { AuthContextProvider } from "./context/AuthContext";
+import ThemeContext from "./context/ThemeContext";
+import { useContext } from "react";
+import Header from "./components/Header";
+import Protected from "./components/Protected";
+import NameQuestion from "./components/NameQuestion";
 
 function App() {
+  const { darkTheme } = useContext(ThemeContext);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="text-[#EDEDED] ">
+      <AuthContextProvider>
+        <Header />
+
+        <Routes>
+          <Route path="/" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/account"
+            element={
+              <Protected>
+                <Account />
+              </Protected>
+            }
+          />
+          <Route path="/nameQuestion" element={<NameQuestion />} />
+        </Routes>
+      </AuthContextProvider>
     </div>
   );
 }
