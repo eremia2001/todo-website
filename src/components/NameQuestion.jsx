@@ -1,11 +1,39 @@
-import React from "react";
+import { async } from "@firebase/util";
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  doc,
+  setDoc,
+} from "firebase/firestore";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { auth, db } from "../firebase";
+import userInfoContext from "../context/UserInfoContext";
+import { uid } from "uid";
 
 const NameQuestion = () => {
+  const [userName, setUserName] = useState("");
+  const { userInfo, setUserInfo } = useContext(userInfoContext);
   const navigate = useNavigate();
 
-  const confirmName = () => {
-    navigate("/account");
+  // Name Bestätigen
+  const confirmName = async () => {
+    const newId = auth.currentUser.uid;
+    try {
+      // speichere Name in Datenbank
+      const docId = await setDoc(doc(db, "Nutzerdaten", newId), {
+        name: userName,
+        documentID: newId,
+      });
+
+      navigate("/account");
+      // speichere lokal
+      //setUserInfo({ ...userInfo, name: userName, docId: randomNumber });
+    } catch (e) {
+      console.log("Error : ", e);
+    }
   };
 
   return (
@@ -21,6 +49,9 @@ const NameQuestion = () => {
           type="text"
           className="border  py-3 px-4 bg-transparent rounded-2xl w-full"
           placeholder="Name"
+          name="userName"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
         />
 
         <button

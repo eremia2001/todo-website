@@ -1,15 +1,17 @@
 import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import userContext from "../context/AuthContext";
+import userAuthContext from "../context/AuthContext";
 import { AiOutlineGoogle } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 
 const SignIn = () => {
-  const { signInUser, user, setUser, googleSignIn } = useContext(userContext);
-  const [email, setEmail] = React.useState("eremia2018@gmail.com");
-  const [password, setPassword] = React.useState("eremia2001");
+  const { signInUser, user, setUser, googleSignIn } =
+    useContext(userAuthContext);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const navigate = useNavigate();
 
+  // LogIn mit Passwort und Email
   const handleSignIn = async () => {
     try {
       await signInUser(email, password);
@@ -17,6 +19,8 @@ const SignIn = () => {
       console.log(error);
     }
   };
+
+  // Log In mit Google
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
@@ -25,13 +29,14 @@ const SignIn = () => {
     }
   };
 
+  // Beim Login  wird weiter navigiert
+  console.log("HALLOI", user);
   useEffect(() => {
     if (user != null) {
-      navigate("/nameQuestion");
+      navigate("/account");
     }
   }, [user]);
 
-  console.log(user);
   return (
     <div
       className={`px-5 max-w-[700px] mx-auto flex flex-col justify-center select-none

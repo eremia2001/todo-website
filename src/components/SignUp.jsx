@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import userContext from "../context/AuthContext";
+import userAuthContext from "../context/AuthContext";
 import ThemeContext from "../context/ThemeContext";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
@@ -11,12 +11,14 @@ import { BsFacebook } from "react-icons/bs";
 import TodoMascot from "../assets/TodoMascot.png";
 
 const SignUp = () => {
+  // Variablen
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const navigate = useNavigate();
+  const { createUser, googleSignIn, user } = useContext(userAuthContext);
 
-  const { createUser, googleSignIn, user } = useContext(userContext);
-
+  // Funktionen
+  // Registrieren mit Google
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
@@ -25,6 +27,7 @@ const SignUp = () => {
     }
   };
 
+  // registrieren mit Email
   const signUp = async () => {
     try {
       await createUser(email, password);
@@ -33,9 +36,10 @@ const SignUp = () => {
     }
   };
 
+  // Wenn registriert wird, wird weiter navigiert
   useEffect(() => {
     if (user != null) {
-      navigate("/account");
+      navigate("/nameQuestion");
     }
   }, [user]);
 

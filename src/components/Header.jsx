@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { BsMoonStarsFill, BsSunFill } from "react-icons/bs";
 import ThemeContext from "../context/ThemeContext";
-import userContext from "../context/AuthContext";
+import userAuthContext from "../context/AuthContext";
 import { async } from "@firebase/util";
 import TodoMascot from "../assets/TodoMascot.png";
 
 const Header = () => {
-  const { user, logOut } = useContext(userContext);
+  const { user, logOut } = useContext(userAuthContext);
   const { darkTheme, handleClick } = useContext(ThemeContext);
 
   console.log(user);

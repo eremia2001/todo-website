@@ -9,6 +9,7 @@ import { useContext } from "react";
 import Header from "./components/Header";
 import Protected from "./components/Protected";
 import NameQuestion from "./components/NameQuestion";
+import { UserInfoContextProvider } from "./context/UserInfoContext";
 
 function App() {
   const { darkTheme } = useContext(ThemeContext);
@@ -17,19 +18,21 @@ function App() {
       <AuthContextProvider>
         <Header />
 
-        <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route
-            path="/account"
-            element={
-              <Protected>
-                <Account />
-              </Protected>
-            }
-          />
-          <Route path="/nameQuestion" element={<NameQuestion />} />
-        </Routes>
+        <UserInfoContextProvider>
+          <Routes>
+            <Route path="/" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route
+              path="/account"
+              element={
+                <Protected>
+                  <Account />
+                </Protected>
+              }
+            />
+            <Route path="/nameQuestion" element={<NameQuestion />} />
+          </Routes>
+        </UserInfoContextProvider>
       </AuthContextProvider>
     </div>
   );

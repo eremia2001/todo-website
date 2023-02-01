@@ -14,28 +14,31 @@ import {
   signInWithPopup,
   signInWithRedirect,
 } from "firebase/auth";
+import { set, ref } from "firebase/database";
 import { auth } from "../firebase";
 
-const userContext = createContext();
+const userAuthContext = createContext();
 
 export function AuthContextProvider({ children }) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
 
   const createUser = (email, passwort) => {
     return createUserWithEmailAndPassword(auth, email, passwort);
   };
 
   const signInUser = (email, passwort) => {
-    const resultUser = signInWithEmailAndPassword(auth, email, passwort);
-    if (resultUser) {
-      setUser({ email, passwort });
-    }
-    return resultUser;
+    signInWithEmailAndPassword(auth, email, passwort)
+      .then((userCredentials) => {
+        console.log("Erfolgreich angemeldet");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const googleSignIn = () => {
-    const provier = new GoogleAuthProvider();
-    signInWithRedirect(auth, provier);
+    const provider = new GoogleAuthProvider();
+    signInWithRedirect(auth, provider);
   };
 
   const logOut = () => {
@@ -52,12 +55,12 @@ export function AuthContextProvider({ children }) {
   }, []);
 
   return (
-    <userContext.Provider
-      value={{ createUser, googleSignIn, user, logOut, signInUser }}
+    <userAuthContext.Provider
+      value={{ createUser, googleSignIn, user, logOut, signInUser, setUser }}
     >
       {children}
-    </userContext.Provider>
+    </userAuthContext.Provider>
   );
 }
 
-export default userContext;
+export default userAuthContext;
